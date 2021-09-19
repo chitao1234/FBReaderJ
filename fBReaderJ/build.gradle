@@ -1,0 +1,43 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "30.0.3"
+
+    defaultConfig {
+        applicationId "org.geometerplus.zlibrary.ui.android"
+        minSdkVersion 11
+        targetSdkVersion 17
+
+        ndk {
+            moduleName "DeflatingDecompressor-v3"
+        }
+        externalNativeBuild {
+            ndkBuild {
+                cppFlags ''
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path file('src/main/jni/Android.mk')
+        }
+    }
+}
+
+dependencies {
+    compile project(':ambilWarna')
+    compile project(':library')
+    compile project(':code')
+    compile project(':superToasts')
+    compile 'com.android.support:support-v4:21.0.3'
+    compile files('libs/httpmime-4.2.5.jar')
+    compile files('libs/nanohttpd-2.0.5.jar')
+}
