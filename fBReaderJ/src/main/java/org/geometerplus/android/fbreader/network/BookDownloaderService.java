@@ -206,6 +206,104 @@ public class BookDownloaderService extends Service {
 		return intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 	}
 
+	// from AOSP
+	private static void setLatestEventInfo(Notification notification, android.content.Context context, CharSequence contentTitle, CharSequence contentText, PendingIntent contentIntent) {
+		if (context.getApplicationInfo().targetSdkVersion < Build.VERSION_CODES.N) {
+			notification.extras.putBoolean(Notification.EXTRA_SHOW_WHEN, true);
+		}
+
+		// ensure that any information already set directly is preserved
+		final Notification.Builder builder = new Notification.Builder(context);
+
+		// start constructing the builder
+		if (notification.actions != null) {
+			for (Notification.Action action : notification.actions) {
+				builder.addAction(action);
+			}
+		}
+
+		if (notification.extras.containsKey(Notification.EXTRA_PEOPLE)) {
+			for (String person: notification.extras.getStringArray(Notification.EXTRA_PEOPLE)) {
+				builder.addPerson(person);
+			}
+		}
+
+		if (notification.getSmallIcon() == null && notification.icon != 0) {
+			builder.setSmallIcon(notification.icon);
+		}
+
+		if (notification.getLargeIcon() == null && notification.largeIcon != null) {
+			builder.setLargeIcon(notification.largeIcon);
+		}
+
+		String templateClass = notification.extras.getString(Notification.EXTRA_TEMPLATE);
+		if (!android.text.TextUtils.isEmpty(templateClass)) {
+			final Class<? extends Notification.Style> styleClass
+					= getNotificationStyleClass(templateClass);
+			if (styleClass != null) {
+				try {
+					final java.lang.reflect.Constructor<? extends Notification.Style> ctor =
+							styleClass.getDeclaredConstructor();
+					ctor.setAccessible(true);
+					final Notification.Style style = ctor.newInstance();
+					restoreFromExtras(style, notification.extras);
+
+					if (style != null) {
+						builder.setStyle(style);
+					}
+				} catch (Throwable ignore) {
+				}
+			}
+		}
+		// end constructing the builder
+
+		// now apply the latestEventInfo fields
+		if (contentTitle != null) {
+			builder.setContentTitle(contentTitle);
+		}
+		if (contentText != null) {
+			builder.setContentText(contentText);
+		}
+		builder.setContentIntent(contentIntent);
+
+		builder.build(); // callers expect this notification to be ready to use
+	}
+
+	// from AOSP
+	private static Class<? extends Notification.Style> getNotificationStyleClass(String templateClass) {
+		Class<? extends Notification.Style>[] classes = new Class[] {
+				Notification.BigTextStyle.class, Notification.BigPictureStyle.class,
+				Notification.InboxStyle.class, Notification.MediaStyle.class,
+				Notification.DecoratedCustomViewStyle.class,
+				Notification.DecoratedMediaCustomViewStyle.class,
+				Notification.MessagingStyle.class };
+		for (Class<? extends Notification.Style> innerClass : classes) {
+			if (templateClass.equals(innerClass.getName())) {
+				return innerClass;
+			}
+		}
+		return null;
+	}
+
+	// from AOSP
+	private static void restoreFromExtras(Notification.Style style, Bundle extras) {
+		try {
+			if (extras.containsKey(Notification.EXTRA_SUMMARY_TEXT)) {
+				Notification.Style.class.getDeclaredMethod("internalSetSummaryText", CharSequence.class).invoke(
+						style,
+						extras.getCharSequence(Notification.EXTRA_SUMMARY_TEXT)
+				);
+			}
+			if (extras.containsKey(Notification.EXTRA_TITLE_BIG)) {
+				Notification.Style.class.getDeclaredMethod("internalSetBigContentTitle", CharSequence.class).invoke(
+						style,
+						extras.getCharSequence(Notification.EXTRA_TITLE_BIG)
+				);
+			}
+		} catch (NoSuchMethodException | IllegalAccessException | java.lang.reflect.InvocationTargetException ignore) {
+		}
+	}
+	
 	private Notification createDownloadFinishNotification(File file, String title, boolean success) {
 		final ZLResource resource = getResource();
 		final String tickerText = success ?
@@ -222,7 +320,7 @@ public class BookDownloaderService extends Service {
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		final Intent intent = success ? getFBReaderIntent(file) : new Intent();
 		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
-		notification.setLatestEventInfo(getApplicationContext(), title, contentText, contentIntent);
+		setLatestEventInfo(notification, getApplicationContext(), title, contentText, contentIntent);
 		return notification;
 	}
 
