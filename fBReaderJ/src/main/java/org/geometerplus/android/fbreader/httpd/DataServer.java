@@ -90,7 +90,7 @@ public class DataServer extends NanoHTTPD {
 					return notFound(uri);
 				}
 				final Response res =
-					new Response(Response.Status.OK, MimeType.IMAGE_PNG.toString(), stream);
+					newFixedLengthResponse(Response.Status.OK, MimeType.IMAGE_PNG.toString(), stream, stream.available());
 				res.addHeader("X-Width", String.valueOf(options.outWidth));
 				res.addHeader("X-Height", String.valueOf(options.outHeight));
 				return res;
@@ -104,7 +104,7 @@ public class DataServer extends NanoHTTPD {
 						bitmap.compress(Bitmap.CompressFormat.JPEG, 85, os);
 						final InputStream is = new ByteArrayInputStream(os.toByteArray());
 						final Response res =
-							new Response(Response.Status.OK, MimeType.IMAGE_JPEG.toString(), is);
+							newFixedLengthResponse(Response.Status.OK, MimeType.IMAGE_JPEG.toString(), is, is.available());
 						res.addHeader("X-Width", String.valueOf(bitmap.getWidth()));
 						res.addHeader("X-Height", String.valueOf(bitmap.getHeight()));
 						return res;
@@ -153,9 +153,9 @@ public class DataServer extends NanoHTTPD {
 		final String range = headers.get("range");
 		if (range == null || !range.startsWith(BYTES_PREFIX)) {
 			if (etag.equals(headers.get("if-none-match")))
-				res = new Response(Response.Status.NOT_MODIFIED, mime, "");
+				res = newFixedLengthResponse(Response.Status.NOT_MODIFIED, mime, "");
 			else {
-				res = new Response(Response.Status.OK, mime, baseStream);
+				res = newFixedLengthResponse(Response.Status.OK, mime, baseStream, fileLength);
 				res.addHeader("ETag", etag);
 			}
 		} else {
@@ -174,7 +174,7 @@ public class DataServer extends NanoHTTPD {
 				}
 			}
 			if (start >= fileLength) {
-				res = new Response(
+				res = newFixedLengthResponse(
 					Response.Status.RANGE_NOT_SATISFIABLE,
 					MimeType.TEXT_PLAIN.toString(),
 					""
@@ -185,10 +185,11 @@ public class DataServer extends NanoHTTPD {
 				if (end == -1 || end >= fileLength) {
 					end = fileLength - 1;
 				}
-				res = new Response(
+				res = newFixedLengthResponse(
 					Response.Status.PARTIAL_CONTENT,
 					mime,
-					new SliceInputStream(baseStream, start, end - start + 1)
+					new SliceInputStream(baseStream, start, end - start + 1),
+					end - start + 1
 				);
 				res.addHeader("ETag", etag);
 				res.addHeader("Content-Range", "bytes " + start + "-" + end + "/" + fileLength);
@@ -200,7 +201,7 @@ public class DataServer extends NanoHTTPD {
 	}
 
 	private Response notFound(String uri) {
-		return new Response(
+		return newFixedLengthResponse(
 			Response.Status.NOT_FOUND,
 			MimeType.TEXT_HTML.toString(),
 			"<html><body><h1>Not found: " + uri + "</h1></body></html>"
@@ -208,7 +209,7 @@ public class DataServer extends NanoHTTPD {
 	}
 
 	private Response noContent(String uri) {
-		return new Response(
+		return newFixedLengthResponse(
 			Response.Status.NO_CONTENT,
 			MimeType.TEXT_HTML.toString(),
 			"<html><body><h1>No content: " + uri + "</h1></body></html>"
@@ -217,7 +218,7 @@ public class DataServer extends NanoHTTPD {
 
 	private Response forbidden(String uri, Throwable t) {
 		t.printStackTrace();
-		return new Response(
+		return newFixedLengthResponse(
 			Response.Status.FORBIDDEN,
 			MimeType.TEXT_HTML.toString(),
 			"<html><body><h1>" + t.getMessage() + "</h1>\n(" + uri + ")</body></html>"

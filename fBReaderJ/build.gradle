@@ -30,6 +30,12 @@ android {
             path file('src/main/jni/Android.mk')
         }
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -38,6 +44,7 @@ dependencies {
     implementation project(':code')
     implementation project(':superToasts')
     implementation 'com.android.support:support-v4:21.0.3'
-    implementation files('libs/httpmime-4.2.5.jar')
-    implementation files('libs/nanohttpd-2.0.5.jar')
+    implementation 'org.apache.httpcomponents:httpmime:4.5.13'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'org.nanohttpd:nanohttpd:2.3.1'
 }
