@@ -18,12 +18,13 @@ android {
                 cppFlags ''
             }
         }
+        versionCode 2051011
+        versionName '2.5.10-hc'
     }
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -38,6 +39,7 @@ android {
     }
 
     useLibrary 'org.apache.http.legacy'
+    ndkVersion '23.0.7599858'
 }
 
 dependencies {
