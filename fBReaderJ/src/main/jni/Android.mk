@@ -10,8 +10,8 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE                  := LineBreak-v2
-LOCAL_SRC_FILES               := LineBreak/LineBreaker.cpp LineBreak/liblinebreak-2.0/linebreak.c LineBreak/liblinebreak-2.0/linebreakdata.c LineBreak/liblinebreak-2.0/linebreakdef.c
+LOCAL_MODULE                  := UniBreak-v4
+LOCAL_SRC_FILES               := UniBreak/LineBreaker.cpp UniBreak/libunibreak-4.3/src/linebreak.c UniBreak/libunibreak-4.3/src/linebreakdata.c UniBreak/libunibreak-4.3/src/linebreakdef.c UniBreak/libunibreak-4.3/src/wordbreak.c UniBreak/libunibreak-4.3/src/graphemebreak.c UniBreak/libunibreak-4.3/src/emojidef.c UniBreak/libunibreak-4.3/src/unibreakbase.c UniBreak/libunibreak-4.3/src/unibreakdef.c
 
 include $(BUILD_SHARED_LIBRARY)
 
