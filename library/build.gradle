@@ -5,8 +5,8 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion 5
-        targetSdkVersion 7
+        minSdkVersion 11
+        targetSdkVersion 25
     }
 
     buildTypes {

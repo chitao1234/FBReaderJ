@@ -4,10 +4,14 @@ android {
     compileSdkVersion 25
     buildToolsVersion "30.0.3"
 
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
     defaultConfig {
         applicationId "org.geometerplus.zlibrary.ui.android"
         minSdkVersion 11
-        targetSdkVersion 17
+        targetSdkVersion 25
 
         ndk {
             moduleName "DeflatingDecompressor-v3"
