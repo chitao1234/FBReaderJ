@@ -17,10 +17,10 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-EXPAT_DIR                     := expat-2.0.1
+EXPAT_DIR                     := expat-2.4.1
 
 LOCAL_MODULE                  := expat
-LOCAL_SRC_FILES               := $(EXPAT_DIR)/lib/xmlparse.c $(EXPAT_DIR)/lib/xmlrole.c $(EXPAT_DIR)/lib/xmltok.c
+LOCAL_SRC_FILES               := $(EXPAT_DIR)/lib/xmlparse.c $(EXPAT_DIR)/lib/xmlrole.c $(EXPAT_DIR)/lib/xmltok.c $(EXPAT_DIR)/lib/xmltok_impl.c $(EXPAT_DIR)/lib/xmltok_ns.c
 LOCAL_CFLAGS                  := -DHAVE_EXPAT_CONFIG_H
 LOCAL_C_INCLUDES              := $(LOCAL_PATH)/$(EXPAT_DIR)
 LOCAL_EXPORT_C_INCLUDES       := $(LOCAL_PATH)/$(EXPAT_DIR)/lib
