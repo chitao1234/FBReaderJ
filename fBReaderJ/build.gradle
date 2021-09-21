@@ -13,9 +13,6 @@ android {
         minSdkVersion 11
         targetSdkVersion 25
 
-        ndk {
-            moduleName "DeflatingDecompressor-v3"
-        }
         externalNativeBuild {
             ndkBuild {
                 cppFlags ''
