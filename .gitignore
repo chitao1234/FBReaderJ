@@ -87,3 +87,7 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+# Build artifact
+fBReaderJ/release/
+fBReaderJ/debug/
