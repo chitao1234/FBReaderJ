@@ -1,4 +1,4 @@
 include ':superToasts'
-include ':code'
-include ':library'
+include ':androidFileChooser'
+include ':dragSortListView'
 include ':fBReaderJ'

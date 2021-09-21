@@ -41,8 +41,8 @@ android {
 }
 
 dependencies {
-    implementation project(':library')
-    implementation project(':code')
+    implementation project(':dragSortListView')
+    implementation project(':androidFileChooser')
     implementation project(':superToasts')
     implementation 'com.github.yukuku:ambilwarna:2.0.1'
     implementation 'com.android.support:support-v4:25.4.0'
