@@ -54,7 +54,6 @@ public abstract class ColorPreference extends Preference {
 
 	@Override
 	protected void onClick() {
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
 		new AmbilWarnaDialog(
 			getContext(),
 			ZLAndroidColorUtil.rgb(getSavedColor()),
@@ -71,9 +70,6 @@ public abstract class ColorPreference extends Preference {
 				@Override
 				public void onCancel(AmbilWarnaDialog dialog) {
 				}
-			},
-			buttonResource.getResource("ok").getValue(),
-			buttonResource.getResource("cancel").getValue()
-		).show();
+			}).show();
 	}
 }

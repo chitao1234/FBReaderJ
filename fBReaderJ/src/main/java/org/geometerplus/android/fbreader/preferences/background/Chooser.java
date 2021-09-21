@@ -75,14 +75,10 @@ public class Chooser extends ListActivity implements AdapterView.OnItemClickList
 		switch (position) {
 			case 0:
 			{
-				final ZLResource buttonResource =
-					ZLResource.resource("dialog").getResource("button");
 				new AmbilWarnaDialog(
 					this,
 					getIntent().getIntExtra(BackgroundPreference.COLOR_KEY, 0),
-					myColorChooserListener,
-					buttonResource.getResource("ok").getValue(),
-					buttonResource.getResource("cancel").getValue()
+					myColorChooserListener
 				).show();
 				break;
 			}

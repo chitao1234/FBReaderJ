@@ -36,10 +36,8 @@ abstract class BookmarksUtil {
 		}
 
 		if (rgb != null) {
-			colorView.showCross(false);
 			colorView.setBackgroundColor(rgb);
 		} else {
-			colorView.showCross(true);
 			colorView.setBackgroundColor(0);
 		}
 	}
