@@ -1,0 +1,11 @@
+--2021-09-21 20:29:01--  https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+Resolving www.gnu.org (www.gnu.org)... 209.51.188.148
+Connecting to www.gnu.org (www.gnu.org)|209.51.188.148|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 18092 (18K) [text/plain]
+Saving to: 'gpl-2.0.txt'
+
+     0K .......... .......                                    100% 64.5K=0.3s
+
+2021-09-21 20:29:03 (64.5 KB/s) - 'gpl-2.0.txt' saved [18092/18092]
+
