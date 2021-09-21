@@ -24,6 +24,7 @@ import java.io.*;
 
 import android.app.*;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.*;
@@ -216,7 +217,7 @@ public class BookDownloaderService extends Service {
 			resource.getResource("downloadFailed").getValue();
 		final Intent intent = success ? getFBReaderIntent(file) : new Intent();
 		final PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
-		Notification.Builder builder = new Notification.Builder(getApplicationContext());
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
 		Notification notification = builder
 				.setSmallIcon(android.R.drawable.stat_sys_download_done)
 				.setTicker(tickerText)
@@ -268,8 +269,9 @@ public class BookDownloaderService extends Service {
 		final int MESSAGE_PROGRESS = 0;
 		final int MESSAGE_FINISH = 1;
 
-		final Handler handler = new Handler() {
-			public void handleMessage(Message message) {
+		final Handler handler = new Handler(new Handler.Callback() {
+			@Override
+			public boolean handleMessage(Message message) {
 				switch (message.what) {
 					case MESSAGE_PROGRESS:
 					{
@@ -299,8 +301,9 @@ public class BookDownloaderService extends Service {
 						doStop();
 						break;
 				}
+				return true;
 			}
-		};
+		});
 
 		final ZLNetworkRequest request = new ZLNetworkRequest.Get(urlString) {
 			public void handleStream(InputStream inputStream, int length) throws IOException, ZLNetworkException {
