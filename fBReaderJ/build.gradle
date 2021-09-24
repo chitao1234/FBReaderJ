@@ -18,8 +18,8 @@ android {
                 cppFlags ''
             }
         }
-        versionCode 2051011
-        versionName '2.5.10-hc'
+        versionCode 2051111
+        versionName '2.5.11-hc'
     }
 
     buildTypes {

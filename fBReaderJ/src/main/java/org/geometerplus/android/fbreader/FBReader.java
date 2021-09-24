@@ -336,12 +336,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		myFBReaderApp.addAction(ActionCode.YOTA_SWITCH_TO_BACK_SCREEN, new YotaSwitchScreenAction(this, myFBReaderApp, true));
 		myFBReaderApp.addAction(ActionCode.YOTA_SWITCH_TO_FRONT_SCREEN, new YotaSwitchScreenAction(this, myFBReaderApp, false));
 
-		Config.Instance().runOnConnect(new Runnable() {
-			public void run() {
-				showPremiumDialog();
-			}
-		});
-
 		final Intent intent = getIntent();
 		final String action = intent.getAction();
 
@@ -1140,120 +1134,6 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		myFBReaderApp.getTextView().removeHighlightings(DictionaryHighlighting.class);
 		myFBReaderApp.getViewWidget().reset();
 		myFBReaderApp.getViewWidget().repaint();
-	}
-
-	private boolean resolveVersionConflict() {
-		final Intent intent = getIntent();
-		if (intent == null) {
-			return false;
-		}
-
-		final Intent premiumIntent = new Intent().setComponent(new ComponentName(
-			"com.fbreader",
-			"com.fbreader.android.fbreader.FBReader"
-		));
-		if (!PackageUtil.canBeStarted(this, premiumIntent, false)) {
-			return false;
-		}
-
-		if (!intent.hasCategory(Intent.CATEGORY_LAUNCHER)) {
-			return true;
-		}
-
-		final ZLResource resource = ZLResource.resource("premium");
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this)
-			.setMessage(resource.getResource("conflict").getValue())
-			.setIcon(0)
-			.setPositiveButton(
-				resource.getResource("shortTitle").getValue(),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						startActivity(premiumIntent);
-						finish();
-					}
-				}
-			)
-			.setNegativeButton(getResources().getString(R.string.app_name), null);
-		ensureFullscreenOnDismiss(builder);
-		builder.create().show();
-		return true;
-	}
-
-	private void showPremiumDialog() {
-		if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-			return;
-		}
-
-		if (resolveVersionConflict()) {
-			return;
-		}
-
-		final int currentTime = (int)(System.currentTimeMillis() / 1000 / 60 / 60);
-		final ZLIntegerOption lastCallOption = new ZLIntegerOption("Premium", "LastCall", 0);
-		final int lastCall = lastCallOption.getValue();
-		if (lastCall == 0) {
-			lastCallOption.setValue(currentTime - 10 * 24);
-			return;
-		}
-		final ZLIntegerOption countOption = new ZLIntegerOption("Premium", "Count", 0);
-		final int count = countOption.getValue();
-		if (count < 5) {
-			countOption.setValue(count + 1);
-			return;
-		}
-		if (lastCall + 15 * 24 > currentTime) {
-			return;
-		}
-
-		if (isFinishing()) {
-			return;
-		}
-
-		countOption.setValue(0);
-		lastCallOption.setValue(currentTime);
-
-		ZLFile textFile =
-			ZLFile.createFileByPath("data/premium/" + ZLResource.getLanguage() + ".html");
-		if (!textFile.exists()) {
-			textFile = ZLFile.createFileByPath("data/premium/en.html");
-		}
-		final StringBuilder buffer = new StringBuilder();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new InputStreamReader(textFile.getInputStream(), "utf-8"));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				buffer.append(line);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		} finally {
-			try {
-				reader.close();
-			} catch (Exception e) {
-				// ignore
-			}
-		}
-		final ZLResource buttonResource = ZLResource.resource("dialog").getResource("button");
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this)
-			.setTitle(ZLResource.resource("premium").getValue())
-			.setMessage(Html.fromHtml(buffer.toString()))
-			.setIcon(0)
-			.setPositiveButton(
-				buttonResource.getResource("buy").getValue(),
-				new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						startActivity(new Intent(
-							Intent.ACTION_VIEW,
-							Uri.parse("market://details?id=com.fbreader")
-						));
-					}
-				}
-			)
-			.setNegativeButton(buttonResource.getResource("noThanks").getValue(), null);
-		ensureFullscreenOnDismiss(builder);
-		builder.create().show();
 	}
 
 	void ensureFullscreenOnDismiss(AlertDialog.Builder builder) {

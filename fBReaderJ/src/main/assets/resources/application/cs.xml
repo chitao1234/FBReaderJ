@@ -1211,10 +1211,6 @@
 		<node name="cannotOpenDictionary" value="Nelze otevřít slovník"/>
 		<node name="noDictionarySelected" value="Není vybrán slovník; opravte to v nastavení Dictanu"/>
 	</node>
-	<node name="premium" value="FBReader prémiová edice">
-		<node name="shortTitle" value="FBReader Premium"/>
-		<node name="conflict" value="Zdá se, že máte nainstalován FBReader a FBReader Premium. Který byste chtěli spustit?"/>
-	</node>
 	<node name="widget">
 		<node name="simple">
 			<node name="selectIcon" value="Vyberte ikonu widgetu"/>

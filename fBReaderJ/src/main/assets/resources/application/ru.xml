@@ -1211,10 +1211,6 @@
 		<node name="cannotOpenDictionary" value="не удалось открыть словать"/>
 		<node name="noDictionarySelected" value="словарь не выбран; сделайте это в настроках Dictan"/>
 	</node>
-	<node name="premium" value="FBReader Premium">
-		<node name="shortTitle" value="FBReader Premium"/>
-		<node name="conflict" value="У вас установлены и FBReader, и FBReader Premium. Который из них вы хотите запустить?"/>
-	</node>
 	<node name="widget">
 		<node name="simple">
 			<node name="selectIcon" value="Выберите иконку"/>

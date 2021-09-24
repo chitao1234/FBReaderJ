@@ -1202,10 +1202,6 @@
 		<node name="cannotOpenDictionary" value="Немагчыма адчыніць слоўнік"/>
 		<node name="noDictionarySelected" value="Слоўнік ня выбраны; калі ласка, наладзьце яго."/>
 	</node>
-	<node name="premium" value="Прэміюмнае выданьне FBReader">
-		<node name="shortTitle" value="FBReader Прэміюм"/>
-		<node name="conflict" value="Выглядае на тое, што ўсталяваныя і FBReader, і FBReader Прэміюм. Які Вы жадаеце запусьціць?"/>
-	</node>
 	<node name="widget">
 		<node name="simple">
 			<node name="selectIcon" value="Select widget icon" toBeTranslated="true"/>
